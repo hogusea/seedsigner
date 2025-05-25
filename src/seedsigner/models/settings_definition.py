@@ -704,16 +704,18 @@ class SettingsDefinition:
         SettingsEntry(category=SettingsConstants.CATEGORY__SYSTEM,
                       attr_name=SettingsConstants.SETTING__DISPLAY_CONFIGURATION,
                       abbreviated_name="disp_conf",
-                      display_name="Display type",
+                      # TRANSLATOR_NOTE: Hardware settings option to specify the screen driver (e.g. st7789 vs ili9341)
+                      display_name=_mft("Display type"),
                       type=SettingsConstants.TYPE__SELECT_1,
                       visibility=SettingsConstants.VISIBILITY__HARDWARE,
                       selection_options=SettingsConstants.ALL_DISPLAY_CONFIGURATIONS,
                       default_value=SettingsConstants.DISPLAY_CONFIGURATION__ST7789__240x240),
-        
+
         SettingsEntry(category=SettingsConstants.CATEGORY__SYSTEM,
                       attr_name=SettingsConstants.SETTING__DISPLAY_COLOR_INVERTED,
                       abbreviated_name="rgb_inv",
-                      display_name="Invert colors",
+                      # TRANSLATOR_NOTE: Hardware settings option to invert how the screen driver displays colors.
+                      display_name=_mft("Invert colors"),
                       type=SettingsConstants.TYPE__ENABLED_DISABLED,
                       visibility=SettingsConstants.VISIBILITY__HARDWARE,
                       default_value=SettingsConstants.OPTION__DISABLED),
