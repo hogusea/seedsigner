@@ -6,6 +6,7 @@ import random
 import sys
 import time
 from unittest.mock import Mock, patch, MagicMock
+from PIL import ImageFont
 
 from embit import compact
 from embit.psbt import PSBT, OutputScope
@@ -20,9 +21,6 @@ sys.modules['RPi'] = MagicMock()
 sys.modules['RPi.GPIO'] = MagicMock()
 sys.modules['seedsigner.hardware.camera'] = MagicMock()
 sys.modules['seedsigner.hardware.microsd'] = MagicMock()
-
-# Force the screenshots to mimic Pi Zero's output without libraqm
-patch('PIL.ImageFont.core.HAVE_RAQM', False).start()
 
 from seedsigner.controller import Controller
 from seedsigner.gui.components import GUIConstants
@@ -47,8 +45,6 @@ from .utils import ScreenshotComplete, ScreenshotConfig, ScreenshotRenderer
 
 import warnings; warnings.warn = lambda *args, **kwargs: None
 
-
-
 # Dynamically generate a pytest test run for each locale
 @pytest.mark.parametrize("locale", [x for x, y in SettingsConstants.get_detected_languages()])
 def test_generate_all(locale, target_locale):
@@ -59,6 +55,11 @@ def test_generate_all(locale, target_locale):
     """
     if target_locale and locale != target_locale:
         pytest.skip(f"Skipping {locale}")
+    
+    if not ImageFont.core.HAVE_RAQM:
+        # We can't generate pixel-perfect screenshots that match what gets rendered on
+        # the device if we don't have libraqm.
+        pytest.fail("libraqm is not installed.")
     
     generate_screenshots(locale)
 
@@ -274,7 +275,7 @@ def generate_screenshots(locale):
                 ScreenshotConfig(MainMenuView, screenshot_name='MainMenuView_DireWarningToast',                toast_thread=DireWarningToast("This is a dire warning toast!", activation_delay=0, duration=0)),
                 ScreenshotConfig(MainMenuView, screenshot_name='MainMenuView_ErrorToast',                      toast_thread=ErrorToast("This is an error toast!", activation_delay=0, duration=0)),
                 ScreenshotConfig(PowerOptionsView),
-                ScreenshotConfig(RestartView),
+                ScreenshotConfig(RestartView, dict(is_screenshot_renderer=True)),
                 ScreenshotConfig(PowerOffView),
             ],
             "Seed Views": [
@@ -412,8 +413,16 @@ def generate_screenshots(locale):
         try:
             print(f"Running {screenshot_config.screenshot_name}")
             try:
+                cur_count = screenshot_renderer.render_count
+
+                # Set up and run the target View
                 screenshot_config.run_callback_before()
                 screenshot_config.View_cls(**screenshot_config.view_kwargs).run()
+
+                if screenshot_renderer.render_count == cur_count:
+                    # The View didn't actually render anything
+                    raise Exception(f"{screenshot_config.screenshot_name} did not render a screenshot. Verify that its `run_screen()` is reachable by the screenshot generator.")
+
             except ScreenshotComplete:
                 # The target View has run and its Screen has rendered what it needs to
                 if toast_thread is not None:
@@ -421,18 +430,10 @@ def generate_screenshots(locale):
                     controller.activate_toast(toast_thread)
                     while controller.toast_notification_thread.is_alive():
                         # Give the Toast a moment to complete its work
-
                         time.sleep(0.01)
 
-                    # TODO: Necessary now that the lock is in place?
-                    # Whenever possible, clean up toast thread HERE before killing the
-                    # main thread with ScreenshotComplete.
-                    toast_thread.stop()
-                    toast_thread.join()
-                raise ScreenshotComplete()
-        except ScreenshotComplete:
-            # Slightly hacky way to exit ScreenshotRenderer as expected
-            print(f"Completed {screenshot_config.screenshot_name}")
+                print(f"Completed {screenshot_config.screenshot_name}")
+
         except Exception as e:
             # Something else went wrong
             from traceback import print_exc
@@ -506,3 +507,5 @@ def generate_screenshots(locale):
 
     with open(os.path.join(screenshot_root, "README.md"), 'w') as readme_file:
         readme_file.write(main_readme)
+
+    print(f"Screenshots rendered: {screenshot_renderer.render_count}")
