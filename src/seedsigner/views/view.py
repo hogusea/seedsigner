@@ -407,3 +407,39 @@ class OptionDisabledView(View):
             return Destination(SettingsEntryUpdateSelectionView, view_args=dict(attr_name=self.settings_attr), clear_history=True)
         else:
             return Destination(MainMenuView, clear_history=True)
+
+
+
+class RemoveMicroSDWarningView(View):
+    CONTINUE = ButtonOption("Continue")
+    SETTINGS = ButtonOption("Settings")
+
+    def run(self):
+        button_data = [self.CONTINUE, self.SETTINGS]
+        selected_menu_num = self.run_screen(
+            WarningScreen,
+            title=_("Action Required"),
+            status_icon_name=SeedSignerIconConstants.MICROSD,
+            status_headline=None,
+            text=_("You must remove the\nMicroSD card to continue."),
+            show_back_button=False,
+            button_data=button_data,
+        )
+
+        if button_data[selected_menu_num] == self.CONTINUE:
+            from seedsigner.hardware.microsd import MicroSD
+            if not MicroSD.get_instance().is_inserted:
+                return Destination(MainMenuView, clear_history=True)
+            else:
+                return Destination(RemoveMicroSDWarningView, clear_history=True)
+
+        elif button_data[selected_menu_num] == self.SETTINGS:
+            from seedsigner.views.settings_views import SettingsEntryUpdateSelectionView
+            return Destination(
+                SettingsEntryUpdateSelectionView, 
+                view_args=dict(
+                    attr_name=SettingsConstants.SETTING__MICROSD_TOAST_TIMER,
+                    blocking_view=RemoveMicroSDWarningView,
+                    unblocking_view=MainMenuView
+                )
+            )
