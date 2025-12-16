@@ -441,7 +441,6 @@ class SeedFinalizeScreen(ButtonListScreen):
 @dataclass
 class SeedOptionsScreen(ButtonListScreen):
     fingerprint: str = None
-    has_passphrase: bool = False
 
     def __post_init__(self):
         self.top_nav_icon_name = SeedSignerIconConstants.FINGERPRINT
@@ -451,24 +450,6 @@ class SeedOptionsScreen(ButtonListScreen):
         self.is_bottom_list = True
 
         super().__post_init__()
-
-
-
-@dataclass
-class SeedBackupScreen(ButtonListScreen):
-    has_passphrase: bool = False
-
-    def __post_init__(self):
-        self.title = _("Backup Seed")
-        self.is_bottom_list = True
-        super().__post_init__()
-
-        if self.has_passphrase:
-            self.components.append(TextArea(
-                # TRANSLATOR_NOTE: Additional explainer for the two seed backup options (mnemonic phrase and SeedQR).
-                text=_("Backups do not include your passphrase."),
-                screen_y=self.top_nav.height + GUIConstants.COMPONENT_PADDING,
-            ))
 
 
 
@@ -608,7 +589,6 @@ class SeedExportXpubDetailsScreen(WarningEdgesMixin, ButtonListScreen):
     # Customize defaults
     is_bottom_list: bool = True
     fingerprint: str = None
-    has_passphrase: bool = False
     derivation_path: str = "m/84'/0'/0'"
     xpub: str = "zpub6r..."
 
