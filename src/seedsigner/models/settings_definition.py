@@ -38,17 +38,18 @@ class SettingsConstants:
     ]
 
     # User-facing selection options
-    COORDINATOR__BLUE_WALLET = "bw"
-    COORDINATOR__NUNCHUK = "nun"
-    COORDINATOR__SPARROW = "spa"
-    COORDINATOR__SPECTER_DESKTOP = "spd"
-    COORDINATOR__KEEPER = "kpr"
-    ALL_COORDINATORS = [
-        (COORDINATOR__BLUE_WALLET, "BlueWallet"),
-        (COORDINATOR__NUNCHUK, "Nunchuk"),
-        (COORDINATOR__SPARROW, "Sparrow"),
-        (COORDINATOR__SPECTER_DESKTOP, "Specter Desktop"),
-        (COORDINATOR__KEEPER, "Keeper"),
+    XPUB_QR_FORMAT__UR_CRYPTO_ACCOUNT = "urca"
+    XPUB_QR_FORMAT__STATIC = "sta"
+    XPUB_QR_FORMAT__SPECTER_LEGACY = "spl"
+    ALL_XPUB_QR_FORMATS = [
+        # TRANSLATOR_NOTE: QR code format option; "default" = this is the format most wallets use
+        (XPUB_QR_FORMAT__UR_CRYPTO_ACCOUNT, _mft("Animated (default)")),
+
+        # TRANSLATOR_NOTE: QR code format option (static = single frame, not animated)
+        (XPUB_QR_FORMAT__STATIC, _mft("Static")),
+
+        # TRANSLATOR_NOTE: QR code format option: old format that Specter Desktop used to use
+        (XPUB_QR_FORMAT__SPECTER_LEGACY, _mft("Specter legacy")),
     ]
 
     # Over-specifying current and possible future locales to reduce/eliminate main repo
@@ -129,6 +130,7 @@ class SettingsConstants:
 
         # --------- Beta languages ------------------------------------------------------
         LOCALE__CHINESE_SIMPLIFIED: "(beta) 简体中文 (Chinese Simplified)",
+        LOCALE__HINDI: "(beta) हिन्दी (Hindi)",
         LOCALE__JAPANESE: "(beta) 日本語 (Japanese)",
         LOCALE__KOREAN: "(beta) 한국어 (Korean)",
         LOCALE__THAI: "(beta) ไทย (Thai)",
@@ -149,7 +151,6 @@ class SettingsConstants:
         # LOCALE__GUJARATI: "ગુજરાતી (Gujarati)",
         LOCALE__HAUSA: "Hausa",
         # LOCALE__HEBREW: "עברית (Hebrew)",
-        # LOCALE__HINDI: "हिन्दी (Hindi)",
         LOCALE__CROATIAN: "Hrvatski",
         LOCALE__INDONESIAN: "Indonesia",
         LOCALE__JAVANESE: "Jawa (Javanese)",
@@ -326,7 +327,7 @@ class SettingsConstants:
     SETTING__LOCALE = "locale"
     SETTING__WORDLIST_LANGUAGE = "wordlist_language"
     SETTING__PERSISTENT_SETTINGS = "persistent_settings"
-    SETTING__COORDINATORS = "coordinators"
+    SETTING__XPUB_QR_FORMAT = "xpub_qr"
     SETTING__BTC_DENOMINATION = "denomination"
 
     SETTING__DISPLAY_CONFIGURATION = "display_config"
@@ -568,19 +569,6 @@ class SettingsDefinition:
                       help_text=SettingsConstants.PERSISTENT_SETTINGS__SD_INSERTED__HELP_TEXT,
                       default_value=SettingsConstants.OPTION__DISABLED),
 
-        SettingsEntry(category=SettingsConstants.CATEGORY__WALLET,
-                      attr_name=SettingsConstants.SETTING__COORDINATORS,
-                      abbreviated_name="coords",
-                      display_name=_mft("Coordinator software"),
-                      type=SettingsConstants.TYPE__MULTISELECT,
-                      selection_options=SettingsConstants.ALL_COORDINATORS,
-                      default_value=[
-                          SettingsConstants.COORDINATOR__BLUE_WALLET,
-                          SettingsConstants.COORDINATOR__NUNCHUK,
-                          SettingsConstants.COORDINATOR__SPARROW,
-                          SettingsConstants.COORDINATOR__SPECTER_DESKTOP,
-                      ]),
-
         SettingsEntry(category=SettingsConstants.CATEGORY__SYSTEM,
                       attr_name=SettingsConstants.SETTING__BTC_DENOMINATION,
                       abbreviated_name="denom",
@@ -624,6 +612,17 @@ class SettingsDefinition:
                       visibility=SettingsConstants.VISIBILITY__ADVANCED,
                       selection_options=SettingsConstants.ALL_SCRIPT_TYPES,
                       default_value=[SettingsConstants.NATIVE_SEGWIT, SettingsConstants.NESTED_SEGWIT, SettingsConstants.TAPROOT]),
+
+        SettingsEntry(category=SettingsConstants.CATEGORY__FEATURES,
+                      attr_name=SettingsConstants.SETTING__XPUB_QR_FORMAT,
+                      display_name=_mft("Xpub QR format"),
+                      visibility=SettingsConstants.VISIBILITY__ADVANCED,
+                      type=SettingsConstants.TYPE__MULTISELECT,
+                      selection_options=SettingsConstants.ALL_XPUB_QR_FORMATS,
+                      default_value=[
+                            SettingsConstants.XPUB_QR_FORMAT__UR_CRYPTO_ACCOUNT,
+                            SettingsConstants.XPUB_QR_FORMAT__STATIC,
+                      ]),
 
         SettingsEntry(category=SettingsConstants.CATEGORY__FEATURES,
                       attr_name=SettingsConstants.SETTING__XPUB_DETAILS,
