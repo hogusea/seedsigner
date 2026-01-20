@@ -71,6 +71,7 @@ class View:
         self.screen = None
 
         self._redirect: 'Destination' = None
+        self.is_screensaver_allowed = True
 
 
     def __init__(self):
