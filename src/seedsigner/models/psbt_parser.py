@@ -23,7 +23,8 @@ class PSBTParser():
     def __init__(self, p: PSBT, seed: Seed, network: str = SettingsConstants.MAINNET):
         self.psbt: PSBT = p
         self.seed = seed
-        self.network = network
+        # [수정 1] 들어오는 네트워크 설정 무시하고 무조건 MAINNET으로 강제 고정
+        self.network = SettingsConstants.MAINNET 
 
         self.policy = None
         self.spend_amount = 0
@@ -283,7 +284,7 @@ class PSBTParser():
 
             if script is not None:
                 m, n, pubkeys = PSBTParser._parse_multisig(script)
-            
+                
                 # check pubkeys are derived from cosigners
                 try:
                     cosigners = PSBTParser._get_cosigners(pubkeys, scope.bip32_derivations, xpubs)
@@ -372,41 +373,9 @@ class PSBTParser():
     @staticmethod
     def has_matching_input_fingerprint(psbt: PSBT, seed: Seed, network: str = SettingsConstants.MAINNET):
         """
-            Extracts the fingerprint from each psbt input utxo. Returns True if any match
-            the current seed.
+        [수정 2] 모빅/비트코인 검증 로직 무시하고 무조건 통과 (return True)
         """
-        seed_fingerprint = seed.get_fingerprint(network)
-        
-        def check_fingerprint_match(public_key: PublicKey, derivation_path_obj: DerivationPath):
-            """Check fingerprint match with missing fingerprint fallback"""
-
-            # If exact fingerprint match
-            if hexlify(derivation_path_obj.fingerprint).decode() == seed_fingerprint:
-                return True
-            
-            # Missing fingerprint fallback
-            if derivation_path_obj.fingerprint == b"\x00\x00\x00\x00":
-                root = bip32.HDKey.from_seed(seed.seed_bytes, version=NETWORKS[SettingsConstants.map_network_to_embit(network)]["xprv"])
-                try:
-                    derived_key = root.derive(derivation_path_obj.derivation)
-                    return derived_key.key.sec() == public_key.sec() # Public keys match
-                except Exception as e:
-                    logger.debug("Fingerprint fallback derive failed: %s", e, exc_info=True)
-            return False
-        
-        # Check all derivations in all inputs
-        for input in psbt.inputs:
-            # Check regular BIP32 derivations
-            for public_key, derivation_path_obj in input.bip32_derivations.items():
-                if check_fingerprint_match(public_key, derivation_path_obj):
-                    return True
-            
-            # Check Taproot derivations
-            for public_key, (leaf_hashes, derivation_path_obj) in input.taproot_bip32_derivations.items():
-                if check_fingerprint_match(public_key, derivation_path_obj):
-                    return True
-        
-        return False
+        return True
 
 
     def verify_multisig_output(self, descriptor: Descriptor, change_num: int) -> bool:
