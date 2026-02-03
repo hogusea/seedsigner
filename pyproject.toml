@@ -13,12 +13,11 @@ description = "Build an offline, airgapped Bitcoin signing device for less than 
 name = "seedsigner"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "0.8.6"
+version = "0.8.6-mobick"
 
 [project.urls]
-"Bug Tracker" = "https://github.com/SeedSigner/seedsigner/issues"
-Homepage = "https://seedsigner.com/"
-Repository = "https://github.com/SeedSigner/seedsigner"
+"Bug Tracker" = "https://github.com/hogusea/seedsigner/issues"
+Repository = "https://github.com/hogusea/seedsigner"
 
 [tool.coverage.html]
 directory = "coverage_html_report"
