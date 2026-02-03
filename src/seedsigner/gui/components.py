@@ -29,7 +29,7 @@ class GUIConstants:
 
     BACKGROUND_COLOR = "#000000"
     INACTIVE_COLOR = "#414141"
-    ACCENT_COLOR = "#FF9F0A" # Active Color
+    ACCENT_COLOR = "#0047AB"  # 기존 #FF9F0A(오렌지)에서 변경 # Active Color
     WARNING_COLOR = "#FFD60A"
     DIRE_WARNING_COLOR = "#FF5700"
     ERROR_COLOR = "#FF1B0A"
@@ -1090,8 +1090,8 @@ class BtcAmount(BaseComponent):
         # TRANSLATOR_NOTE: Testnet sats
         sats_unit = _("tSats")
         if network == SettingsConstants.MAINNET:
-            btc_unit = _("btc")
-            sats_unit = _("sats")
+            btc_unit = _("MO")
+            sats_unit = _("bick")
             btc_color = GUIConstants.ACCENT_COLOR
 
         elif network == SettingsConstants.TESTNET:

@@ -132,7 +132,7 @@ class SettingsConstants:
         LOCALE__CHINESE_SIMPLIFIED: "(beta) 简体中文 (Chinese Simplified)",
         LOCALE__HINDI: "(beta) हिन्दी (Hindi)",
         LOCALE__JAPANESE: "(beta) 日本語 (Japanese)",
-        LOCALE__KOREAN: "(beta) 한국어 (Korean)",
+        LOCALE__KOREAN: "한국어 (Korean)", # (beta) 삭제
         LOCALE__THAI: "(beta) ไทย (Thai)",
 
         # --------- Placeholders / Coming soon ------------------------------------------
@@ -212,16 +212,17 @@ class SettingsConstants:
 
         return detected_languages
 
-
-    BTC_DENOMINATION__BTC = "btc"
-    BTC_DENOMINATION__SATS = "sats"
+    # 1. 내부 식별자 (상수 값)
+    BTC_DENOMINATION__BTC = "MO"
+    BTC_DENOMINATION__SATS = "bick"
     BTC_DENOMINATION__THRESHOLD = "thr"
     BTC_DENOMINATION__BTCSATSHYBRID = "hyb"
+    # 2. 화면 출력용 설정
     ALL_BTC_DENOMINATIONS = [
-        (BTC_DENOMINATION__BTC, _mft("BTC")),
-        (BTC_DENOMINATION__SATS, _mft("sats")),
+        (BTC_DENOMINATION__BTC, _mft("MO")),
+        (BTC_DENOMINATION__SATS, _mft("bick")),
         (BTC_DENOMINATION__THRESHOLD, _mft("Threshold at 0.01")),
-        (BTC_DENOMINATION__BTCSATSHYBRID, _mft("BTC | sats hybrid")),
+        (BTC_DENOMINATION__BTCSATSHYBRID, _mft("MO | sats hybrid")),
     ]
 
     CAMERA_ROTATION__0 = 0
@@ -257,8 +258,8 @@ class SettingsConstants:
     REGTEST = "R"
     ALL_NETWORKS = [
         (MAINNET, _mft("Mainnet")),
-        (TESTNET, _mft("Testnet")),
-        (REGTEST, _mft("Regtest"))
+        # (TESTNET, _mft("Testnet")), # 제거
+        # (REGTEST, _mft("Regtest")) # 제거
     ]
 
     @classmethod
@@ -581,7 +582,7 @@ class SettingsDefinition:
         # Advanced options
         SettingsEntry(category=SettingsConstants.CATEGORY__FEATURES,
                       attr_name=SettingsConstants.SETTING__NETWORK,
-                      display_name=_mft("Bitcoin network"),
+                      display_name=_mft("BTCmobick network"),
                       type=SettingsConstants.TYPE__SELECT_1,
                       visibility=SettingsConstants.VISIBILITY__ADVANCED,
                       selection_options=SettingsConstants.ALL_NETWORKS,
