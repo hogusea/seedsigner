@@ -18,8 +18,8 @@
 
 # Project Summary
 
-[![CI](https://github.com/SeedSigner/seedsigner/actions/workflows/tests.yml/badge.svg)](https://github.com/SeedSigner/seedsigner/actions/workflows/tests.yml)
-[![Build](https://github.com/SeedSigner/seedsigner/actions/workflows/build.yml/badge.svg)](https://github.com/SeedSigner/seedsigner/actions/workflows/build.yml)
+[![CI](https://github.com/hogusea/seedsigner/actions/workflows/tests.yml/badge.svg)](https://github.com/hogusea/seedsigner/actions/workflows/tests.yml)
+[![Build](https://github.com/hogusea/seedsigner/actions/workflows/build.yml/badge.svg)](https://github.com/hogusea/seedsigner/actions/workflows/build.yml)
 
 The goal of SeedSigner is to lower the cost and complexity of Bitcoin multisignature wallet use. To accomplish this goal, SeedSigner offers anyone the opportunity to build a verifiably air-gapped, stateless Bitcoin signing device using inexpensive, publicly available hardware components (usually < $50). SeedSigner helps users save with Bitcoin by assisting with trustless private key generation and multisignature (aka "multisig") wallet setup, and helps users transact with Bitcoin via a secure, air-gapped QR-exchange signing model.
 
@@ -60,7 +60,7 @@ If you have specific questions about the project, our [Telegram Group](https://t
   * Mainnet, testnet, and regtest.
 
 * Additional utilities:
-  * [SettingsQR](https://github.com/SeedSigner/seedsigner-settings-generator) to instantly reconfigure a SeedSigner for beginners, advanced users, or tailored to your preferences.
+  * [SettingsQR](https://github.com/hogusea/seedsigner-settings-generator) to instantly reconfigure a SeedSigner for beginners, advanced users, or tailored to your preferences.
   * Scan a software wallet's receive or change address to verify that it's correct.
   * Address Explorer for single sig and multisig wallets.
   * Message signing to prove address ownership.
@@ -107,7 +107,7 @@ As is the nature of pre-packaged software downloads, downloading and using the p
 
 Starting with v0.7.0, the images distributed via GitHub are reproducible. This means you and others can verify the released images are byte-for-byte the same when built from source. You can contribute to this project by building from source and sharing the hash of the final images.
 
-Instructions to build a SeedSigner OS image (using precisely the same process that is used to create the prepared release images) have been made available. We have put a lot of thought and work into making these instructions easy to understand and follow, even for less technical users. These instructions can be found [here](https://github.com/SeedSigner/seedsigner-os/blob/main/docs/building.md).
+Instructions to build a SeedSigner OS image (using precisely the same process that is used to create the prepared release images) have been made available. We have put a lot of thought and work into making these instructions easy to understand and follow, even for less technical users. These instructions can be found [here](https://github.com/hogusea/seedsigner-os/blob/main/docs/building.md).
 
 ## Downloading the Software
 
@@ -115,27 +115,27 @@ Instructions to build a SeedSigner OS image (using precisely the same process th
 Download the current Version (0.8.6) software image that is compatible with your  Raspberry Pi Hardware. The Pi Zero 1.3 is the most common and recommended board.
 | Board                 | Download Image Link/Name          |
 | --------------------- | --------------------------------- |
-|**[Raspberry Pi Zero 1.3](https://www.raspberrypi.com/products/raspberry-pi-zero/)**      |[`seedsigner_os.0.8.6.pi0.img`](https://github.com/SeedSigner/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi0.img)      |
-|[Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/)    |[`seedsigner_os.0.8.6.pi0.img`](https://github.com/SeedSigner/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi0.img)      |
-|[Raspberry Pi Zero 2 W](https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/)  |[`seedsigner_os.0.8.6.pi02w.img`](https://github.com/SeedSigner/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi02w.img)    |
-|[Raspberry Pi 1 Model B/B+](https://www.raspberrypi.com/products/raspberry-pi-1-model-b-plus/) |[`seedsigner_os.0.8.6.pi0.img`](https://github.com/SeedSigner/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi0.img)      |
-|[Raspberry Pi 2 Model B](https://www.raspberrypi.com/products/raspberry-pi-2-model-b/) |[`seedsigner_os.0.8.6.pi2.img`](https://github.com/SeedSigner/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi2.img)      |
-|[Raspberry Pi 3 Model B](https://www.raspberrypi.com/products/raspberry-pi-3-model-b/) |[`seedsigner_os.0.8.6.pi02w.img`](https://github.com/SeedSigner/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi02w.img)    |
-|[Raspberry Pi 4 Model B](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/) |[`seedsigner_os.0.8.6.pi4.img`](https://github.com/SeedSigner/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi4.img)      |
-|[Raspberry Pi 400](https://www.raspberrypi.com/products/raspberry-pi-400-unit/) |[`seedsigner_os.0.8.6.pi4.img`](https://github.com/SeedSigner/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi4.img)      |
+|**[Raspberry Pi Zero 1.3](https://www.raspberrypi.com/products/raspberry-pi-zero/)**      |[`seedsigner_os.0.8.6.pi0.img`](https://github.com/hogusea/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi0.img)      |
+|[Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/)    |[`seedsigner_os.0.8.6.pi0.img`](https://github.com/hogusea/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi0.img)      |
+|[Raspberry Pi Zero 2 W](https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/)  |[`seedsigner_os.0.8.6.pi02w.img`](https://github.com/hogusea/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi02w.img)    |
+|[Raspberry Pi 1 Model B/B+](https://www.raspberrypi.com/products/raspberry-pi-1-model-b-plus/) |[`seedsigner_os.0.8.6.pi0.img`](https://github.com/hogusea/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi0.img)      |
+|[Raspberry Pi 2 Model B](https://www.raspberrypi.com/products/raspberry-pi-2-model-b/) |[`seedsigner_os.0.8.6.pi2.img`](https://github.com/hogusea/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi2.img)      |
+|[Raspberry Pi 3 Model B](https://www.raspberrypi.com/products/raspberry-pi-3-model-b/) |[`seedsigner_os.0.8.6.pi02w.img`](https://github.com/hogusea/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi02w.img)    |
+|[Raspberry Pi 4 Model B](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/) |[`seedsigner_os.0.8.6.pi4.img`](https://github.com/hogusea/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi4.img)      |
+|[Raspberry Pi 400](https://www.raspberrypi.com/products/raspberry-pi-400-unit/) |[`seedsigner_os.0.8.6.pi4.img`](https://github.com/hogusea/seedsigner/releases/download/0.8.6/seedsigner_os.0.8.6.pi4.img)      |
 
 Note: If you have physically removed the WiFi component from your board, you will still use the image file of the original (un-modified) hardware. (Our files are compiled/based on the *processor* architecture). Although it is better to spend a few minutes upfront to determine which specific Pi hardware/model you have, if you are still unsure which hardware you have, you can try using the pi0.img file. Making an incorrect choice here will not ruin your board, because this is software, not firmware. 
 
 **Also download** these 2 signature verification files to the same folder  
-[The Plaintext manifest file](https://github.com/SeedSigner/seedsigner/releases/download/0.8.6/seedsigner.0.8.6.sha256.txt)  
-[The Signature of the manifest file](https://github.com/SeedSigner/seedsigner/releases/download/0.8.6/seedsigner.0.8.6.sha256.txt.sig)
+[The Plaintext manifest file](https://github.com/hogusea/seedsigner/releases/download/0.8.6/seedsigner.0.8.6.sha256.txt)  
+[The Signature of the manifest file](https://github.com/hogusea/seedsigner/releases/download/0.8.6/seedsigner.0.8.6.sha256.txt.sig)
 
 
 Users familiar with older versions of the SeedSigner software might be surprised with how fast their software downloads now are, because since version 0.6.0 the software image files are now 100x smaller! Each image file is now under 42 Megabytes so your downloads and verifications will be very quick now (and might even seem *too* quick)!  
 
 Once the files have all finished downloading, follow the steps below to verify the download before continuing on to write the software onto a MicroSD card. Next, insert the MicroSD into your assembled hardware and connect the USB power. Allow about 45 seconds for our logo to appear, and then you can begin using your SeedSigner! 
 
-[Our previous software versions are available here](https://github.com/SeedSigner/seedsigner/releases). Choose a specific version and then expand the *Assets* sub-heading to display the .img file binary and also the 2 associated signature files. **Note:** The prior version files will have lower numbers than the scripts and examples provided in this document, but the naming format will be the same, so you can edit them as required for signature verification etc.   
+[Our previous software versions are available here](https://github.com/hogusea/seedsigner/releases). Choose a specific version and then expand the *Assets* sub-heading to display the .img file binary and also the 2 associated signature files. **Note:** The prior version files will have lower numbers than the scripts and examples provided in this document, but the naming format will be the same, so you can edit them as required for signature verification etc.   
 
 
 ## Verifying your download
@@ -212,7 +212,7 @@ Keybase.io allows you to independently verify that the public key saved on Keyba
  
  - *via Keybase*: By clicking on any of the three blue badges to see that the "proof" was published at that location. (The blue badge marked as tweet, is in the most human-readable form and it is also a bi-directional link on Twitter)    
 or, 
- - *without keybase (out-of-band)*: By using these 3 links directly: [Twitter](https://twitter.com/SeedSigner/status/1530555252373704707), [Github](https://gist.github.com/SeedSigner/5936fa1219b07e28a3672385b605b5d2) and [SeedSigner.com](https://seedsigner.com/keybase.txt). This method can be used if you would like to make an even deeper, independent inspection without relying on Keybase at all, or if the Keybase.io site is no longer valid or it is removed entirely. 
+ - *without keybase (out-of-band)*: By using these 3 links directly: [Twitter](https://twitter.com/SeedSigner/status/1530555252373704707), [Github](https://gist.github.com/hogusea/5936fa1219b07e28a3672385b605b5d2) and [SeedSigner.com](https://seedsigner.com/keybase.txt). This method can be used if you would like to make an even deeper, independent inspection without relying on Keybase at all, or if the Keybase.io site is no longer valid or it is removed entirely. 
 
 Once you have used one of these methods, you will know if the Public Key stored on Keybase, is genuinely from the SeedSigner Project or not.
 </p>
@@ -290,7 +290,7 @@ Use the Pi imager software as your first choice on Windows. Windows can sometime
 
 ### Open Pill
 
-The Open Pill enclosure design is all about quick, simple and inexpensive deployment of a SeedSigner device. The design does not require any additional hardware and can be printed using a standard FDM 3D printer in about 2 hours, no supports necessary. A video demonstrating the assembly process can be found [here](https://youtu.be/gXPFJygZobEa). To access the design file and printable model, click [here](https://github.com/SeedSigner/seedsigner/tree/main/enclosures/open_pill).
+The Open Pill enclosure design is all about quick, simple and inexpensive deployment of a SeedSigner device. The design does not require any additional hardware and can be printed using a standard FDM 3D printer in about 2 hours, no supports necessary. A video demonstrating the assembly process can be found [here](https://youtu.be/gXPFJygZobEa). To access the design file and printable model, click [here](https://github.com/hogusea/seedsigner/tree/main/enclosures/open_pill).
 
 ### Orange Pill
 
@@ -300,7 +300,7 @@ The Orange Pill enclosure design offers a more finished look that includes butto
 * 4 x M2.5 pan head screws, 6mm length
 * 4 x M2.5 pan head screws, 12mm length
 
-The upper and lower portions of the enclosure can be printed using a standard FDM 3D printer, no supports necessary. The buttons and joystick nub should ideally be produced with a SLA/resin printer. An overview of the entire assembly process can be found [here](https://youtu.be/aIIc2DiZYcI). To access the design files and printable models, click [here](https://github.com/SeedSigner/seedsigner/tree/main/enclosures/orange_pill).
+The upper and lower portions of the enclosure can be printed using a standard FDM 3D printer, no supports necessary. The buttons and joystick nub should ideally be produced with a SLA/resin printer. An overview of the entire assembly process can be found [here](https://youtu.be/aIIc2DiZYcI). To access the design files and printable models, click [here](https://github.com/hogusea/seedsigner/tree/main/enclosures/orange_pill).
 
 ### Community Designs
 
@@ -354,7 +354,7 @@ Letter templates(8.5in * 11in):
 ---------------
 
 # Build from Source
-See the [SeedSigner OS repo](https://github.com/SeedSigner/seedsigner-os/) for instructions.
+See the [SeedSigner OS repo](https://github.com/hogusea/seedsigner-os/) for instructions.
 
 # Developer Local Build Instructions
 Raspberry Pi OS is commonly used for development. See the [Raspberry Pi OS Build Instructions](docs/raspberry_pi_os_build_instructions.md)

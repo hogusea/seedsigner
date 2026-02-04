@@ -24,8 +24,8 @@ If you modified or added functionality/workflow, did you add new unit tests?
 
 I have tested this PR on the following platforms/os:
 
-- [ ] Raspberry Pi OS [Manual Build](https://github.com/SeedSigner/seedsigner/blob/dev/docs/manual_installation.md)
-- [ ] [SeedSigner OS](https://github.com/SeedSigner/seedsigner-os) on a Pi0/Pi0W board
+- [ ] Raspberry Pi OS [Manual Build](https://github.com/hogusea/seedsigner/blob/dev/docs/manual_installation.md)
+- [ ] [SeedSigner OS](https://github.com/hogusea/seedsigner-os) on a Pi0/Pi0W board
 - [ ] Other
 
 

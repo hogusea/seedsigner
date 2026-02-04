@@ -396,7 +396,7 @@ class PSBTParser():
         Filling the missing fingerprints allows SeedSigner to correctly identify inputs /
         outputs that belong to the signing seed.
 
-        see: https://github.com/SeedSigner/seedsigner/issues/359
+        see: https://github.com/hogusea/seedsigner/issues/359
         """
         if not self.root:
             return 0

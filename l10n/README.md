@@ -7,7 +7,7 @@
 1. Translators work within Transifex on their respective languages.
 1. Completed translations are downloaded as `messages.po` files for each language.
 1. Python "compiles" them into `messages.mo` files ready for use.
-1. The `*.po` and `*.mo` files are written to the [seedsigner-translations](https://github.com/SeedSigner/seedsigner-translations) repo.
+1. The `*.po` and `*.mo` files are written to the [seedsigner-translations](https://github.com/hogusea/seedsigner-translations) repo.
 1. That repo is linked as a submodule here as `seedsigner.resources.seedsigner-translations`.
 1. Python code retrieves a translation on demand.
 

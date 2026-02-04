@@ -1,12 +1,12 @@
 # Raspberry Pi OS Local Dev Build Instructions
 
-Since v0.6.0, official releases use our custom [SeedSigner OS](https://github.com/SeedSigner/seedsigner-os/). However, project contributors looking to do rapid development cycles typically use the older Raspberry Pi OS that we had previously built on prior to v0.6.0. If you're here to set up your SeedSigner for local development, continue reading.
+Since v0.6.0, official releases use our custom [SeedSigner OS](https://github.com/hogusea/seedsigner-os/). However, project contributors looking to do rapid development cycles typically use the older Raspberry Pi OS that we had previously built on prior to v0.6.0. If you're here to set up your SeedSigner for local development, continue reading.
 
 Begin by acquiring the latest 32-bit, Buster-based Raspberry Pi Lite operating system. This guide was tested using the version dated 2023-05-03, which can be found here:
 
 https://downloads.raspberrypi.org/raspios_oldstable_lite_armhf/images/raspios_oldstable_lite_armhf-2023-05-03/
 
-SeedSigner does not work with any of the more recent versions of Debian. This is a known limitation and there are open tickets to track the progress of this ([Debian 11 ticket](https://github.com/SeedSigner/seedsigner/issues/431), [Debian 12 ticket](https://github.com/SeedSigner/seedsigner/issues/430)). This guide does not work on the 64-bit versions of Buster, however pull requests to update it to be compatible are welcome.
+SeedSigner does not work with any of the more recent versions of Debian. This is a known limitation and there are open tickets to track the progress of this ([Debian 11 ticket](https://github.com/hogusea/seedsigner/issues/431), [Debian 12 ticket](https://github.com/hogusea/seedsigner/issues/430)). This guide does not work on the 64-bit versions of Buster, however pull requests to update it to be compatible are welcome.
 
 Best practice is to verify the downloaded file containing the Raspberry Pi Lite OS matches the published SHA256 hash of the file; for additional reference that hash is: 3d210e61b057de4de90eadb46e28837585a9b24247c221998f5bead04f88624c. After verifying the file's data integrity, you can decompress the .tar.xz file to obtain the operating system image that it contains. You can then use Balena's Etcher tool (https://www.balena.io/etcher/) to write the Raspberry Pi Lite software image to a memory card (4 GB or larger). It's important to note that an image authoring tool must be used (the operating system image cannot be simply copied into a file storage partition on the memory card).
 
@@ -149,7 +149,7 @@ sudo rm -rf bcm2835-1.60
 
 ### Download the SeedSigner code:
 ```bash
-git clone https://github.com/SeedSigner/seedsigner
+git clone https://github.com/hogusea/seedsigner
 cd seedsigner
 ```
 
