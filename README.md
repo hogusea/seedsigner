@@ -1,6 +1,6 @@
 # Mobick Logbook (formerly SeedSigner)
 
-### Build an offline, airgapped BitMobick signing device for less than $50!
+### Build an offline, airgapped BTCMobick signing device for less than $50!
 
 ![Mobick Logbook Device](docs/img/Mini_Pill_Main_Photo.jpg) 
 *(Image placeholder: You can replace this with your own Mobick Logbook photo later)*
@@ -21,12 +21,12 @@
 
 # Project Summary
 
-**Mobick Logbook** is a specialized fork of the [SeedSigner](https://github.com/SeedSigner/seedsigner) project, tailored specifically for the **BitMobick** ecosystem.
+**Mobick Logbook** is a specialized fork of the [SeedSigner](https://github.com/SeedSigner/seedsigner) project, tailored specifically for the **BTCMobick** ecosystem.
 
-The goal of Mobick Logbook is to lower the cost and complexity of BitMobick multisignature wallet use. It offers anyone the opportunity to build a verifiably air-gapped, stateless signing device using inexpensive, publicly available hardware components (usually < $50).
+The goal of Mobick Logbook is to lower the cost and complexity of BTCMobick multisignature wallet use. It offers anyone the opportunity to build a verifiably air-gapped, stateless signing device using inexpensive, publicly available hardware components (usually < $50).
 
 ### Key Changes in Mobick Logbook:
-* **BitMobick Support:** Native support for the BitMobick network and unit (`bick`).
+* **BTCMobick Support:** Native support for the BTCMobick network and unit (`bick`).
 * **Korean Language Support:** Fully localized Korean interface (select via Settings).
 * **Mobick Donation QR:** Built-in QR code display for easy donations.
 * **Rebranded UI:** Custom boot logo and user interface tweaks.
