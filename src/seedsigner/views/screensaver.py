@@ -102,7 +102,10 @@ class OpeningSplashScreen(LogoScreen):
         # The logo png is 240x240, but the actual logo is 70px tall, vertically centered
         logo_height = 70
         version_x = int(self.renderer.canvas_width/2)
-        version_y = int(self.canvas_height/2) + int(logo_height/2) + logo_offset_y + GUIConstants.COMPONENT_PADDING
+
+        # 맨 뒤에 '+ 20'을 붙여서 글자를 강제로 20픽셀 내립니다!
+        # (만약 그래도 겹치면 30이나 40으로 늘리세요)
+        version_y = int(self.canvas_height/2) + int(logo_height/2) + logo_offset_y + GUIConstants.COMPONENT_PADDING + 20
         self.renderer.draw.text(xy=(version_x, version_y), text=version, font=font, fill=GUIConstants.ACCENT_COLOR, anchor="mt")
 
         if not self.renderer.is_screenshot_generator:
@@ -122,7 +125,7 @@ class OpeningSplashScreen(LogoScreen):
 
             x = int((self.renderer.canvas_width) / 2)
             y = self.canvas_height - GUIConstants.COMPONENT_PADDING - partner_logo.height - int(GUIConstants.COMPONENT_PADDING/2) - th
-            self.renderer.draw.text(xy=(120, 200), text=sponsor_text, font=font, fill="#ccc", anchor="mt")
+            self.renderer.draw.text(xy=(x, y), text=sponsor_text, font=font, fill="#ccc", anchor="mt")
             self.renderer.canvas.paste(
                 partner_logo,
                 (
