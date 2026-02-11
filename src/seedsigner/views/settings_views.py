@@ -8,8 +8,7 @@ from seedsigner.models.settings import Settings, SettingsConstants, SettingsDefi
 
 from .view import View, Destination, MainMenuView
 
-from seedsigner.gui.screens.screen import QRDisplayScreen 
-from seedsigner.models.qr_encoder import QrEncoder
+from seedsigner.gui.screens.screen import QRDisplayScreen
 
 
 logger = logging.getLogger(__name__)
@@ -352,27 +351,8 @@ class IOTestView(View):
 
 
 
-# class DonateView(View):
-#     def run(self):
-#         self.run_screen(settings_screens.DonateScreen)
-
-#         return Destination(SettingsMenuView)
-
-
-
 class DonateView(View):
     def run(self):
-        # 형님 지갑 주소
-        DONATE_ADDR = "1LNcsr7uqn2vxhBEy9hV82VGDbcJHauxZh"
-
-        # 1. QR 데이터 포장 (이게 핵심!)
-        qr_encoder = QrEncoder(data=DONATE_ADDR)
-
-        # 2. 화면 띄우기 (옵션 다 빼고 순정으로)
-        self.run_screen(
-            QRDisplayScreen,
-            qr_encoder=qr_encoder,
-            title="Donate Mobick"
-        )
+        self.run_screen(settings_screens.DonateScreen)
 
         return Destination(SettingsMenuView)
