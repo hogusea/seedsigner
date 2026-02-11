@@ -8,6 +8,8 @@ from seedsigner.models.settings import Settings, SettingsConstants, SettingsDefi
 
 from .view import View, Destination, MainMenuView
 
+from seedsigner.gui.screens.screen import QRDisplayScreen 
+
 logger = logging.getLogger(__name__)
 
 
@@ -348,8 +350,23 @@ class IOTestView(View):
 
 
 
+# class DonateView(View):
+#     def run(self):
+#         self.run_screen(settings_screens.DonateScreen)
+
+#         return Destination(SettingsMenuView)
+
 class DonateView(View):
     def run(self):
-        self.run_screen(settings_screens.DonateScreen)
-
+        # 1. 도네이트 모빅 주소 
+        my_mobick_addr = "1LNcsr7uqn2vxhBEy9hV82VGDbcJHauxZh"
+        
+        # 2. "글자판(DonateScreen)" 대신 "QR판(QRDisplayScreen)"을 부릅니다!
+        self.run_screen(
+            QRDisplayScreen,
+            qr_data=my_mobick_addr,   # QR로 만들 내용
+            title="Donate Mobick",    # 화면 제목
+            show_text=my_mobick_addr  # QR 밑에 주소 글자도 보여줄까요? (지우면 안나옴)
+        )
+        
         return Destination(SettingsMenuView)

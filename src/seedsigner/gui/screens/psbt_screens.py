@@ -582,7 +582,7 @@ class PSBTMathScreen(ButtonListScreen):
         render_amount(
             cur_y,
             f" {self.change_amount}",
-            # TRANSLATOR_NOTE: Denonination is inserted (e.g. your "btc change" or "sats change")
+            # TRANSLATOR_NOTE: Denonination is inserted (e.g. your "MO change" or "bick change")
             info_text=_("{} change").format(denomination),
             info_text_color="darkorange"  # super-sampling alters the perceived color
         )

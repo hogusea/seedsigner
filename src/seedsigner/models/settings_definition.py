@@ -200,6 +200,9 @@ class SettingsConstants:
         # it should always appear first in the list anyway.
         detected_languages = [(cls.LOCALE__ENGLISH, cls.ALL_LOCALES[cls.LOCALE__ENGLISH])]
 
+        # 파일 스캔 결과 무시하고 한국어(ko) 강제로 메뉴에 꽂아넣기
+        detected_languages.append((cls.LOCALE__KOREAN, cls.ALL_LOCALES[cls.LOCALE__KOREAN]))
+
         locales_present = set()
         for root, dirs, files in os.walk(os.path.join(cwd, "seedsigner", "resources", "seedsigner-translations", "l10n")):
             for file in [f for f in files if f.endswith(".mo")]:
@@ -207,6 +210,10 @@ class SettingsConstants:
                 locales_present.add(root.split(f"l10n{ os.sep }")[1].split(os.sep)[0])
 
         for locale in cls.ALL_LOCALES.keys():
+            # 한국어는 이미 위에서 넣었으니 중복 방지 (English도 마찬가지)
+            if locale == cls.LOCALE__KOREAN:
+                continue
+            
             if locale in locales_present:
                 detected_languages.append((locale, cls.ALL_LOCALES[locale]))
 
@@ -222,7 +229,7 @@ class SettingsConstants:
         (BTC_DENOMINATION__BTC, _mft("MO")),
         (BTC_DENOMINATION__SATS, _mft("bick")),
         (BTC_DENOMINATION__THRESHOLD, _mft("Threshold at 0.01")),
-        (BTC_DENOMINATION__BTCSATSHYBRID, _mft("MO | sats hybrid")),
+        (BTC_DENOMINATION__BTCSATSHYBRID, _mft("MO | bick hybrid")),
     ]
 
     CAMERA_ROTATION__0 = 0

@@ -136,7 +136,7 @@ msgid_plural "recipients"
 msgstr[0] ""
 msgstr[1] ""
 
-#. Denonination is inserted (e.g. your "btc change" or "sats change")
+#. Denonination is inserted (e.g. your "MO change" or "bick change")
 #: src/seedsigner/gui/screens/psbt_screens.py
 msgid "{} change"
 msgstr ""
