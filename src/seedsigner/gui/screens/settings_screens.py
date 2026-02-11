@@ -13,7 +13,6 @@ from seedsigner.hardware.buttons import HardwareButtonsConstants
 from seedsigner.hardware.camera import Camera
 from seedsigner.models.settings import SettingsConstants
 
-from seedsigner.gui.screens.screen import QRDisplayScreen
 
 
 
@@ -290,39 +289,30 @@ class IOTestScreen(BaseTopNavScreen):
 
 
 @dataclass
-# class DonateScreen(BaseTopNavScreen):
-#     def __post_init__(self):
-#         self.title = _("Donate")
-#         super().__post_init__()
+class DonateScreen(BaseTopNavScreen):
+    def __post_init__(self):
+        self.title = _("Donate")
+        super().__post_init__()
 
-#         self.components.append(TextArea(
-#             # TRANSLATOR_NOTE: If your language uses the percent sign ("%"), your translation must also use two percent signs ("%%") due to python formatting oddities. "100%%" will be rendered as "100%".
-#             text=_("SeedSigner is 100%% free & open source, funded solely by the Bitcoin community.\n\nDonate onchain or LN at:").replace("%%", "%"),
-#             screen_y=self.top_nav.height + 3*GUIConstants.COMPONENT_PADDING,
-#         ))
+        self.components.append(TextArea(
+            # TRANSLATOR_NOTE: If your language uses the percent sign ("%"), your translation must also use two percent signs ("%%") due to python formatting oddities. "100%%" will be rendered as "100%".
+            # text=_("SeedSigner is 100%% free & open source, funded solely by the Bitcoin community.\n\nDonate onchain or LN at:").replace("%%", "%"),
+            text=_("BTCmobick Logbook\nForged by HoguSea.\n\n(Not for sale, Just for fun)"),
+            # screen_y=self.top_nav.height + 3*GUIConstants.COMPONENT_PADDING,
+            screen_y=self.top_nav.height + 20,
+        ))
 
-#         self.components.append(TextArea(
-#             text="seedsigner.com",
-#             font_name=GUIConstants.get_body_font_name(),
-#             font_size=28,
-#             font_color=GUIConstants.ACCENT_COLOR,
-#             supersampling_factor=1,
-#             screen_y=self.components[-1].screen_y + self.components[-1].height + GUIConstants.COMPONENT_PADDING
-#         ))
+        self.components.append(TextArea(
+            text="1LNcsr7uqn2vxhBEy9hV82VGDbcJHauxZh\n(Good luck typing this!)",
+            font_name=GUIConstants.get_body_font_name(),
+            font_size=15, # 기존 28
+            font_color=GUIConstants.ACCENT_COLOR,
+            supersampling_factor=1,
+            # screen_y=self.components[-1].screen_y + self.components[-1].height + GUIConstants.COMPONENT_PADDING
+            # 위치 살짝 조정
+            screen_y=self.components[-1].screen_y + self.components[-1].height + 20
+        ))
 
-
-# 원래는 BaseTopNavScreen(글자화면)이었는데, QRDisplayScreen(QR화면)으로 상속을 바꿉니다.
-class DonateScreen(QRDisplayScreen):
-    def __init__(self):
-        # ▼▼▼ 후원 모빅 주소를 여기에 넣으세요! ▼▼▼
-        DONATE_ADDR = "1LNcsr7uqn2vxhBEy9hV82VGDbcJHauxZh"
-        
-        # 부모님(QRDisplayScreen)한테 주소랑 제목을 미리 셋팅해서 넘깁니다.
-        # 이렇게 하면 View에서 아무것도 안 넘겨줘도 알아서 QR을 그립니다.
-        super().__init__(
-            qr_data=DONATE_ADDR,
-            title="Donate Mobick"
-        )
 
 
 
