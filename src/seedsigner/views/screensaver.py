@@ -122,7 +122,7 @@ class OpeningSplashScreen(LogoScreen):
 
             x = int((self.renderer.canvas_width) / 2)
             y = self.canvas_height - GUIConstants.COMPONENT_PADDING - partner_logo.height - int(GUIConstants.COMPONENT_PADDING/2) - th
-            self.renderer.draw.text(xy=(x, y), text=sponsor_text, font=font, fill="#ccc", anchor="mt")
+            self.renderer.draw.text(xy=(120, 160), text=sponsor_text, font=font, fill="#ccc", anchor="mt")
             self.renderer.canvas.paste(
                 partner_logo,
                 (

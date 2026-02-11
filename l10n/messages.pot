@@ -232,7 +232,7 @@ msgstr ""
 
 #: src/seedsigner/gui/screens/screen.py
 msgid ""
-"SeedSigner is restarting.\n"
+"MOBICK LOGBOOK is restarting.\n"
 "\n"
 "All in-memory data will be wiped."
 msgstr ""

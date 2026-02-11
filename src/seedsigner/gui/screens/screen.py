@@ -1079,7 +1079,7 @@ class ResetScreen(BaseTopNavScreen):
         super().__post_init__()
 
         self.components.append(TextArea(
-            text=_("SeedSigner is restarting.\n\nAll in-memory data will be wiped."),
+            text=_("MOBICK LOGBOOK is restarting.\n\nAll in-memory data will be wiped."),
             screen_y=self.top_nav.height,
             height=self.canvas_height - self.top_nav.height,
         ))

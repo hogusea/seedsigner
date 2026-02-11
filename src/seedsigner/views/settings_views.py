@@ -365,8 +365,6 @@ class DonateView(View):
         self.run_screen(
             QRDisplayScreen,
             qr_data=my_mobick_addr,   # QR로 만들 내용
-            title="Donate Mobick",    # 화면 제목
-            show_text=my_mobick_addr  # QR 밑에 주소 글자도 보여줄까요? (지우면 안나옴)
         )
         
         return Destination(SettingsMenuView)
