@@ -10,6 +10,7 @@ from .view import View, Destination, MainMenuView
 
 from seedsigner.gui.screens.screen import QRDisplayScreen 
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -356,15 +357,17 @@ class IOTestView(View):
 
 #         return Destination(SettingsMenuView)
 
+
 class DonateView(View):
     def run(self):
-        # 1. 도네이트 모빅 주소 
-        my_mobick_addr = "1LNcsr7uqn2vxhBEy9hV82VGDbcJHauxZh"
+        # 형님 지갑 주소
+        DONATE_ADDR = "1LNcsr7uqn2vxhBEy9hV82VGDbcJHauxZh"
         
-        # 2. "글자판(DonateScreen)" 대신 "QR판(QRDisplayScreen)"을 부릅니다!
+        # QR 화면 호출 (가장 단순한 형태)
         self.run_screen(
             QRDisplayScreen,
-            qr_data=my_mobick_addr,   # QR로 만들 내용
+            qr_data=DONATE_ADDR, 
+            title="Donate Mobick"
         )
         
         return Destination(SettingsMenuView)
