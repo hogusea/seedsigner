@@ -303,7 +303,7 @@ class DonateScreen(BaseTopNavScreen):
         ))
 
         self.components.append(TextArea(
-            text="1LNcsr7uqn2vxhBEy9hV82VGDbcJHauxZh\n(Good luck typing this!)",
+            text="1LNcsr7uqn2vxhBEy9h\nV82VGDbcJHauxZh\n(Good luck typing this!)",
             font_name=GUIConstants.get_body_font_name(),
             font_size=15, # 기존 28
             font_color=GUIConstants.ACCENT_COLOR,
