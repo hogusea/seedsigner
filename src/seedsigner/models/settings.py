@@ -258,7 +258,29 @@ class Settings(Singleton):
         locale = self.get_value(SettingsConstants.SETTING__LOCALE)
         os.environ['LANGUAGE'] = locale
 
-        # Re-initialize with the new locale
+        # Re-initialize gettext with the new locale
+        path = os.path.join(
+            pathlib.Path(__file__).parent.resolve().parent.resolve(),
+            "resources",
+            "seedsigner-translations",
+            "l10n"
+        )
+        
+        try:
+            # Create and install a new translation object for the selected locale
+            translation = gettext.translation(
+                'messages',
+                localedir=path,
+                languages=[locale],
+                fallback=True  # Fall back to original strings if translation not found
+            )
+            translation.install()
+            print(f"Successfully loaded locale: {locale}")
+        except Exception as e:
+            print(f"Error loading locale {locale}: {e}")
+            # Fall back to NullTranslations which returns original strings
+            gettext.NullTranslations().install()
+        
         print(f"Set LANGUAGE locale to {os.environ['LANGUAGE']}")
 
 
