@@ -132,7 +132,7 @@ class SettingsConstants:
         LOCALE__CHINESE_SIMPLIFIED: "(beta) 简体中文 (Chinese Simplified)",
         LOCALE__HINDI: "(beta) हिन्दी (Hindi)",
         LOCALE__JAPANESE: "(beta) 日本語 (Japanese)",
-        LOCALE__KOREAN: "한국어 (Korean)", # (beta) 삭제
+        LOCALE__KOREAN: "한국어", # (beta) 삭제
         LOCALE__THAI: "(beta) ไทย (Thai)",
 
         # --------- Placeholders / Coming soon ------------------------------------------
