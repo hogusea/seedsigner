@@ -297,7 +297,7 @@ class DonateScreen(BaseTopNavScreen):
         self.components.append(TextArea(
             # TRANSLATOR_NOTE: If your language uses the percent sign ("%"), your translation must also use two percent signs ("%%") due to python formatting oddities. "100%%" will be rendered as "100%".
             # text=_("SeedSigner is 100%% free & open source, funded solely by the Bitcoin community.\n\nDonate onchain or LN at:").replace("%%", "%"),
-            text=_("BTCmobick Logbook\nForged by HoguSea.\n\n(Not for sale, Just for fun)"),
+            text=_("Mobick Logbook\nForged by HoguSea.\n\n(Not for sale, Just for fun)"),
             # screen_y=self.top_nav.height + 3*GUIConstants.COMPONENT_PADDING,
             screen_y=self.top_nav.height + 20,
         ))
