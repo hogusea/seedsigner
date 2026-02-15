@@ -25,13 +25,19 @@
 
 The goal of Mobick Logbook is to lower the cost and complexity of BTCMobick multisignature wallet use. It offers anyone the opportunity to build a verifiably air-gapped, stateless signing device using inexpensive, publicly available hardware components (usually < $50).
 
-### Key Changes in Mobick Logbook:
-* **BTCMobick Support:** Native support for the BTCMobick network and unit (`bick`).
-* **Korean Language Support:** Fully localized Korean interface (select via Settings).
-* **Mobick Donation QR:** Built-in QR code display for easy donations.
-* **Rebranded UI:** Custom boot logo and user interface tweaks.
+# Key Changes & Features
 
-### Standard Features (Inherited from SeedSigner):
+### 🇰🇷 Specialized for Mobick & Korea
+* **Korean Language Support (한글화):**
+  * Fully localized Korean interface added.
+  * Select "Korean" (한국어) in the Settings menu.
+* **BTCMobick Ecosystem:**
+  * Native support for the **BTCMobick** network and unit (`bick`).
+* **Custom Branding:**
+  * "Mobick Logbook" boot logo and UI rebranding.
+  * **Custom Toast Messages:** Special signature "Forged by HoguSea" confirmation toasts upon boot/SD card insertion.
+
+### Standard Features (Inherited from SeedSigner)
 * **Stateless, air-gapped operation:**
   * Temporarily stores seeds in memory while the device is powered; all memory is wiped when power is removed.
   * No WiFi or Bluetooth hardware onboard.
@@ -64,7 +70,7 @@ To build a Mobick Logbook, you will need the same hardware as a standard SeedSig
 
 ## Downloading the Software
 
-Download the latest **Mobick Logbook** release image (v0.8.6-mobick) from the [Releases Page](https://github.com/hogusea/seedsigner/releases).
+Download the latest **Mobick Logbook** release image (v1.0.0) from the [Releases Page](https://github.com/hogusea/seedsigner/releases).
 
 | Board | Download Image Link |
 | :--- | :--- |
@@ -118,6 +124,41 @@ If you prefer to build the OS image yourself from source code:
 
    Follow the build instructions in the seedsigner-os repository (or use the provided build scripts if available).
 
-2. Developer Notes
-    Localization (Korean Support)
-    We use a manual compilation script for Korean translations.
+2. Update Submodules (Important)
+This fork uses a custom translation repository. You must update the pointers correctly.
+
+```bash
+git submodule update --init --recursive
+# Note: The 'seedsigner-screenshots' submodule has been removed in this fork to prevent build errors.
+```
+
+3. Build with Docker
+Navigate to the seedsigner-os directory (you may need to clone the OS repo separately or use the provided build scripts).
+
+Recommended Build Command:
+Use this command to ensure the builder pulls the correct Korean translation files from the hogusea fork:
+
+```bash
+./build.sh --pi0 --dev --app-repo=[https://github.com/hogusea/seedsigner.git](https://github.com/hogusea/seedsigner.git) --app-branch=dev
+```
+
+Localization
+Korean Translation (Contributor Note)
+Translation files are located in src/seedsigner/resources/seedsigner-translations/l10n/ko/.
+
+Important: .mo files (compiled binary) are ignored by git by default. If you update the translation, you must force add the compiled file:
+
+```bash
+# Example for updating Korean translation
+git add -f l10n/ko/LC_MESSAGES/messages.mo
+git commit -m "feat: update Korean translation"
+```
+
+# SeedQR Printable Templates
+Mobick Logbook supports the standard SeedQR format for air-gapped seed backups.
+
+* [12-word SeedQR template](docs/seed_qr/printable_templates/dots_25x25.pdf)
+* [24-word SeedQR template](docs/seed_qr/printable_templates/dots_29x29.pdf)
+
+[More information about SeedQRs](docs/seed_qr/README.md)
+
