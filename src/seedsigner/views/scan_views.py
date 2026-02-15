@@ -207,7 +207,24 @@ class ScanSeedQRView(ScanView):
     invalid_qr_type_message = _mft("Expected a SeedQR")
 
     @property
+    def instructions_text(self):
+        if self.controller.resume_main_flow == self.controller.FLOW__PSBT:
+            return _mft("Scan key QR")
+        return _mft("Scan SeedQR")
+
+    @property
+    def invalid_qr_type_message(self):
+        if self.controller.resume_main_flow == self.controller.FLOW__PSBT:
+            return _mft("Expected a key QR (SeedQR or WIF)")
+        return _mft("Expected a SeedQR")
+
+    @property
     def is_valid_qr_type(self):
+        # In the PSBT signer-selection flow, allow scanning either a SeedQR or a WIF key.
+        # This prevents a hard "Wrong QR Type" dead-end when users choose "Scan key QR"
+        # but present a WIF QR for signing.
+        if self.controller.resume_main_flow == self.controller.FLOW__PSBT:
+            return self.decoder.is_seed or self.decoder.is_wif_key
         return self.decoder.is_seed
 
 
