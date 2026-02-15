@@ -9,11 +9,25 @@ from seedsigner.views.view import BackStackView, MainMenuView, NotYetImplemented
 
 
 class PSBTSelectSeedView(View):
-    SCAN_SEED = ButtonOption("Scan key QR", SeedSignerIconConstants.QRCODE)
+    SCAN_SEED = ButtonOption("Scan SeedQR", SeedSignerIconConstants.QRCODE)
     SCAN_WIF = ButtonOption("Scan WIF key", SeedSignerIconConstants.QRCODE)
     TYPE_12WORD = ButtonOption("Enter 12-word seed", FontAwesomeIconConstants.KEYBOARD)
     TYPE_24WORD = ButtonOption("Enter 24-word seed", FontAwesomeIconConstants.KEYBOARD)
     TYPE_ELECTRUM = ButtonOption("Enter Electrum seed", FontAwesomeIconConstants.KEYBOARD)
+
+
+    def _psbt_supports_seed_signing(self) -> bool:
+        """
+        Seed-based signing needs input derivation metadata.
+        If missing (e.g. single-address paper-wallet PSBT), only WIF signing is viable.
+        """
+        if not self.controller.psbt:
+            return False
+
+        for inp in self.controller.psbt.inputs:
+            if len(inp.bip32_derivations) > 0 or len(inp.taproot_bip32_derivations) > 0:
+                return True
+        return False
 
 
     def run(self):
@@ -25,28 +39,34 @@ class PSBTSelectSeedView(View):
             # Shouldn't be able to get here
             raise Exception("No transaction currently loaded")
 
-        if self.controller.psbt_seed:
+        supports_seed_signing = self._psbt_supports_seed_signing()
+
+        if self.controller.psbt_seed and supports_seed_signing:
              if PSBTParser.has_matching_input_fingerprint(psbt=self.controller.psbt, seed=self.controller.psbt_seed, network=self.settings.get_value(SettingsConstants.SETTING__NETWORK)):
                  # skip the seed prompt if a seed was previous selected and has matching input fingerprint
                  return Destination(PSBTOverviewView)
+        elif not supports_seed_signing:
+            self.controller.psbt_seed = None
 
-        seeds = self.controller.storage.seeds
+        seeds = self.controller.storage.seeds if supports_seed_signing else []
         button_data = []
-        for seed in seeds:
-            button_str = seed.get_fingerprint(self.settings.get_value(SettingsConstants.SETTING__NETWORK))
-            if not PSBTParser.has_matching_input_fingerprint(psbt=self.controller.psbt, seed=seed, network=self.settings.get_value(SettingsConstants.SETTING__NETWORK)):
-                # Doesn't look like this seed can sign the current PSBT
-                # TRANSLATOR_NOTE: Inserts fingerprint w/"?" to indicate that this seed can't sign the current PSBT
-                button_str = _("{} (?)").format(button_str)
+        if supports_seed_signing:
+            for seed in seeds:
+                button_str = seed.get_fingerprint(self.settings.get_value(SettingsConstants.SETTING__NETWORK))
+                if not PSBTParser.has_matching_input_fingerprint(psbt=self.controller.psbt, seed=seed, network=self.settings.get_value(SettingsConstants.SETTING__NETWORK)):
+                    # Doesn't look like this seed can sign the current PSBT
+                    # TRANSLATOR_NOTE: Inserts fingerprint w/"?" to indicate that this seed can't sign the current PSBT
+                    button_str = _("{} (?)").format(button_str)
 
-            button_data.append(ButtonOption(button_str, SeedSignerIconConstants.FINGERPRINT))
+                button_data.append(ButtonOption(button_str, SeedSignerIconConstants.FINGERPRINT))
 
-        button_data.append(self.SCAN_SEED)
+            button_data.append(self.SCAN_SEED)
         button_data.append(self.SCAN_WIF)
-        button_data.append(self.TYPE_12WORD)
-        button_data.append(self.TYPE_24WORD)
-        if self.settings.get_value(SettingsConstants.SETTING__ELECTRUM_SEEDS) == SettingsConstants.OPTION__ENABLED:
-            button_data.append(self.TYPE_ELECTRUM)
+        if supports_seed_signing:
+            button_data.append(self.TYPE_12WORD)
+            button_data.append(self.TYPE_24WORD)
+            if self.settings.get_value(SettingsConstants.SETTING__ELECTRUM_SEEDS) == SettingsConstants.OPTION__ENABLED:
+                button_data.append(self.TYPE_ELECTRUM)
 
         selected_menu_num = self.run_screen(
             ButtonListScreen,
@@ -58,7 +78,7 @@ class PSBTSelectSeedView(View):
         if selected_menu_num == RET_CODE__BACK_BUTTON:
             return Destination(BackStackView)
 
-        if len(seeds) > 0 and selected_menu_num < len(seeds):
+        if supports_seed_signing and len(seeds) > 0 and selected_menu_num < len(seeds):
             # User selected one of the n seeds
             self.controller.psbt_seed = self.controller.get_seed(selected_menu_num)
             self.controller.psbt_wif = None
