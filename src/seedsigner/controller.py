@@ -111,6 +111,7 @@ class Controller(Singleton):
     # TODO: Should all in-memory flow-related attrs get wiped on MainMenuView?
     psbt: PSBT = None
     psbt_seed: Seed = None
+    psbt_wif = None
     psbt_parser: PSBTParser = None
 
     unverified_address = None
@@ -186,6 +187,8 @@ class Controller(Singleton):
 
         # Store one working psbt in memory
         controller.psbt = None
+        controller.psbt_seed = None
+        controller.psbt_wif = None
         controller.psbt_parser = None
 
         # Configure the Renderer
@@ -313,6 +316,7 @@ class Controller(Singleton):
                     self.psbt = None
                     self.psbt_parser = None
                     self.psbt_seed = None
+                    self.psbt_wif = None
                 
                 logger.info(f"\nback_stack: {self.back_stack}")
 

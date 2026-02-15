@@ -94,6 +94,7 @@ class ScanView(View):
                 psbt = self.decoder.get_psbt()
                 self.controller.psbt = psbt
                 self.controller.psbt_parser = None
+                self.controller.psbt_wif = None
                 return Destination(PSBTSelectSeedView, skip_current_view=True)
 
             elif self.decoder.is_settings:
@@ -144,6 +145,27 @@ class ScanView(View):
                         "network": network,
                     }
                 )
+
+            elif self.decoder.is_wif_key:
+                from seedsigner.views.psbt_views import PSBTWIFWarningView
+                wif_key = self.decoder.get_wif_key()
+
+                if not wif_key:
+                    return Destination(ScanInvalidQRTypeView)
+
+                if not self.controller.psbt:
+                    return Destination(ErrorView, view_args=dict(
+                        title="Error",
+                        status_headline=_("No transaction loaded"),
+                        text=_("Scan a transaction first, then scan a WIF key."),
+                        button_text="Back",
+                        next_destination=Destination(BackStackView, skip_current_view=True),
+                    ))
+
+                self.controller.psbt_wif = wif_key
+                self.controller.psbt_seed = None
+                self.controller.psbt_parser = None
+                return Destination(PSBTWIFWarningView, skip_current_view=True)
             
             elif self.decoder.is_sign_message:
                 from seedsigner.views.seed_views import SeedSignMessageStartView
@@ -207,6 +229,15 @@ class ScanAddressView(ScanView):
     @property
     def is_valid_qr_type(self):
         return self.decoder.is_address
+
+
+class ScanWIFKeyView(ScanView):
+    instructions_text = _mft("Scan WIF key")
+    invalid_qr_type_message = _mft("Expected a WIF private key")
+
+    @property
+    def is_valid_qr_type(self):
+        return self.decoder.is_wif_key
 
 
 

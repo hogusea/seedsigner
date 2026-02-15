@@ -10,6 +10,7 @@ from seedsigner.views.view import BackStackView, MainMenuView, NotYetImplemented
 
 class PSBTSelectSeedView(View):
     SCAN_SEED = ButtonOption("Scan a seed", SeedSignerIconConstants.QRCODE)
+    SCAN_WIF = ButtonOption("Scan WIF key", SeedSignerIconConstants.QRCODE)
     TYPE_12WORD = ButtonOption("Enter 12-word seed", FontAwesomeIconConstants.KEYBOARD)
     TYPE_24WORD = ButtonOption("Enter 24-word seed", FontAwesomeIconConstants.KEYBOARD)
     TYPE_ELECTRUM = ButtonOption("Enter Electrum seed", FontAwesomeIconConstants.KEYBOARD)
@@ -41,6 +42,7 @@ class PSBTSelectSeedView(View):
             button_data.append(ButtonOption(button_str, SeedSignerIconConstants.FINGERPRINT))
 
         button_data.append(self.SCAN_SEED)
+        button_data.append(self.SCAN_WIF)
         button_data.append(self.TYPE_12WORD)
         button_data.append(self.TYPE_24WORD)
         if self.settings.get_value(SettingsConstants.SETTING__ELECTRUM_SEEDS) == SettingsConstants.OPTION__ENABLED:
@@ -59,6 +61,7 @@ class PSBTSelectSeedView(View):
         if len(seeds) > 0 and selected_menu_num < len(seeds):
             # User selected one of the n seeds
             self.controller.psbt_seed = self.controller.get_seed(selected_menu_num)
+            self.controller.psbt_wif = None
             return Destination(PSBTOverviewView)
         
         # The remaining flows are a sub-flow; resume PSBT flow once the seed is loaded.
@@ -66,10 +69,17 @@ class PSBTSelectSeedView(View):
 
         if button_data[selected_menu_num] == self.SCAN_SEED:
             from seedsigner.views.scan_views import ScanSeedQRView
+            self.controller.psbt_wif = None
             return Destination(ScanSeedQRView)
+
+        elif button_data[selected_menu_num] == self.SCAN_WIF:
+            from seedsigner.views.scan_views import ScanWIFKeyView
+            self.controller.psbt_seed = None
+            return Destination(ScanWIFKeyView)
 
         elif button_data[selected_menu_num] in [self.TYPE_12WORD, self.TYPE_24WORD]:
             from seedsigner.views.seed_views import SeedMnemonicEntryView
+            self.controller.psbt_wif = None
             if button_data[selected_menu_num] == self.TYPE_12WORD:
                 self.controller.storage.init_pending_mnemonic(num_words=12)
             else:
@@ -78,6 +88,7 @@ class PSBTSelectSeedView(View):
 
         elif button_data[selected_menu_num] == self.TYPE_ELECTRUM:
             from seedsigner.views.seed_views import SeedElectrumMnemonicStartView
+            self.controller.psbt_wif = None
             return Destination(SeedElectrumMnemonicStartView)
 
 
@@ -555,6 +566,58 @@ class PSBTFinalizeView(View):
 
 
 
+class PSBTWIFWarningView(View):
+    CONTINUE = ButtonOption("Continue")
+
+    def run(self):
+        if not self.controller.psbt or not self.controller.psbt_wif:
+            return Destination(PSBTSelectSeedView, clear_history=True)
+
+        selected_menu_num = self.run_screen(
+            WarningScreen,
+            status_headline=_("Limited Verification"),
+            text=_("WIF signing skips key-path ownership checks and change verification."),
+            button_data=[self.CONTINUE],
+        )
+
+        if selected_menu_num == RET_CODE__BACK_BUTTON:
+            return Destination(BackStackView)
+
+        return Destination(PSBTWIFFinalizeView)
+
+
+class PSBTWIFFinalizeView(View):
+    APPROVE_PSBT = ButtonOption("Approve transaction")
+
+    def run(self):
+        from embit.psbt import PSBT
+        from seedsigner.gui.screens.psbt_screens import PSBTFinalizeScreen
+
+        psbt: PSBT = self.controller.psbt
+        wif_key = self.controller.psbt_wif
+
+        if not psbt or not wif_key:
+            return Destination(MainMenuView)
+
+        selected_menu_num = self.run_screen(
+            PSBTFinalizeScreen,
+            button_data=[self.APPROVE_PSBT]
+        )
+
+        if selected_menu_num == RET_CODE__BACK_BUTTON:
+            return Destination(BackStackView)
+
+        sig_cnt = PSBTParser.sig_count(psbt)
+        psbt.sign_with(wif_key)
+        trimmed_psbt = PSBTParser.trim(psbt)
+
+        if sig_cnt == PSBTParser.sig_count(trimmed_psbt):
+            return Destination(PSBTWIFSigningErrorView)
+
+        self.controller.psbt = trimmed_psbt
+        return Destination(PSBTSignedQRDisplayView)
+
+
 class PSBTSignedQRDisplayView(View):
     def run(self):
         from seedsigner.models.encode_qr import UrPsbtQrEncoder
@@ -594,6 +657,29 @@ class PSBTSigningErrorView(View):
             # clear seed selected for psbt signing since it did not add a valid signature
             self.controller.psbt_seed = None
             return Destination(PSBTSelectSeedView, clear_history=True)
+
+        if selected_menu_num == RET_CODE__BACK_BUTTON:
+            return Destination(BackStackView)
+
+
+class PSBTWIFSigningErrorView(View):
+    SCAN_DIFF_WIF = ButtonOption("Scan different WIF key")
+
+    def run(self):
+        from seedsigner.views.scan_views import ScanWIFKeyView
+
+        selected_menu_num = self.run_screen(
+            WarningScreen,
+            title=_("Transaction Error"),
+            status_icon_name=SeedSignerIconConstants.WARNING,
+            status_headline=_("Signing Failed"),
+            text=_("Signing with this WIF key did not add a valid signature."),
+            button_data=[self.SCAN_DIFF_WIF]
+        )
+
+        if selected_menu_num == 0:
+            self.controller.psbt_wif = None
+            return Destination(ScanWIFKeyView, clear_history=True)
 
         if selected_menu_num == RET_CODE__BACK_BUTTON:
             return Destination(BackStackView)

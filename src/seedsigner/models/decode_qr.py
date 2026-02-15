@@ -6,7 +6,7 @@ import zlib
 
 from binascii import a2b_base64, b2a_base64
 from enum import IntEnum
-from embit import psbt, bip39
+from embit import psbt, bip39, ec
 from pyzbar import pyzbar
 from pyzbar.pyzbar import ZBarSymbol
 from urtypes.crypto import PSBT as UR_PSBT
@@ -87,6 +87,9 @@ class DecodeQR:
 
             elif self.qr_type == QRType.BITCOIN_ADDRESS:
                 self.decoder = BitcoinAddressQrDecoder() # Single Segment bitcoin address
+
+            elif self.qr_type == QRType.PRIVATE_KEY__WIF:
+                self.decoder = WifKeyQrDecoder() # Single Segment WIF private key
 
             elif self.qr_type == QRType.SIGN_MESSAGE:
                 self.decoder = SignMessageQrDecoder() # Single Segment sign message request
@@ -209,6 +212,10 @@ class DecodeQR:
         # TODO: Implement this approach across all decoders
         return self.decoder.get_qr_data()
 
+    def get_wif_key(self):
+        if self.is_wif_key:
+            return self.decoder.get_key()
+
 
     def get_wallet_descriptor(self):
         if self.is_wallet_descriptor:
@@ -290,7 +297,11 @@ class DecodeQR:
     @property
     def is_address(self):
         return self.qr_type == QRType.BITCOIN_ADDRESS
-        
+
+    @property
+    def is_wif_key(self):
+        return self.qr_type == QRType.PRIVATE_KEY__WIF
+
 
     @property
     def is_sign_message(self):
@@ -389,6 +400,10 @@ class DecodeQR:
             # Bitcoin Address
             elif DecodeQR.is_bitcoin_address(s):
                 return QRType.BITCOIN_ADDRESS
+
+            # WIF private key
+            elif DecodeQR.is_wif(s):
+                return QRType.PRIVATE_KEY__WIF
 
             # message signing
             elif s.startswith("signmessage"):
@@ -519,6 +534,14 @@ class DecodeQR:
         elif re.search(r'^((bc1|tb1|bcr|[123]|[mn])[a-zA-HJ-NP-Z0-9]{25,62})$', s, re.IGNORECASE):
             return True
         else:
+            return False
+
+    @staticmethod
+    def is_wif(s):
+        try:
+            ec.PrivateKey.from_wif(s.strip())
+            return True
+        except Exception:
             return False
 
 
@@ -989,6 +1012,29 @@ class SignMessageQrDecoder(BaseSingleFrameQrDecoder):
     def get_qr_data(self) -> dict:
         return dict(derivation_path=self.derivation_path, message=self.message)
 
+
+
+class WifKeyQrDecoder(BaseSingleFrameQrDecoder):
+    """
+        Decodes a single frame representing a WIF private key.
+    """
+    def __init__(self):
+        super().__init__()
+        self.key = None
+
+
+    def add(self, segment, qr_type=QRType.PRIVATE_KEY__WIF):
+        try:
+            self.key = ec.PrivateKey.from_wif(segment.strip())
+            self.complete = True
+            self.collected_segments = 1
+            return DecodeQRStatus.COMPLETE
+        except Exception:
+            return DecodeQRStatus.INVALID
+
+
+    def get_key(self):
+        return self.key
 
 
 class BitcoinAddressQrDecoder(BaseSingleFrameQrDecoder):

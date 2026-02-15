@@ -1,9 +1,14 @@
+from binascii import a2b_base64
+from embit import bip32
+from embit.psbt import PSBT
+
 from seedsigner.models.decode_qr import DecodeQR, DecodeQRStatus
 from seedsigner.models.psbt_parser import PSBTParser
 from seedsigner.models.qr_type import QRType
 from seedsigner.models.seed import Seed
 
 from seedsigner.models.settings_definition import SettingsConstants
+from psbt_testing_util import PSBTTestData, create_output
 
 
 
@@ -254,6 +259,34 @@ def test_specter_multisig_animated_qr():
     expected_signed_trimmed_base642 = "cHNidP8BAKQCAAAAA6DLc9RAdKwWQb/7Nrq1FyAtDQ3e0w5E4LkLpcrwBL0aAAAAAAD9////78NG2vqjywKaa0QHfo6C44o1+odXeWZ43FfHy4bLdxABAAAAAP3///8rhueJha90HzgJ6alnJ1uvi0Zbq0JQoXnwDb0Cjn79DwAAAAAA/f///wHWCBAAAAAAABYAFDraKFKubXzlSvRQy8V4X+TwKhLXAAAAAAAiAgIv4ZP089Gh3DcLFcr/Om6kI99LFHsT5XO9/AqiYPn5S0cwRAIgMJcGjoczA/ht/oTuE30a5StXa9l72t5+jayaURudfnECIGw+ymYS2RDszHL+KXRuoiNjvAUiIIKE7wa7+RKORevBAQAiAgJnXJ8+nIC4cTUtC795s+zlThrpxrAJRLHpGYkEQyw1x0cwRAIgH5pFuC079UUXzPJU1ya57Lak9Yc4NkAttmOEsNphd/cCIBnVkzO/wVfD5dxWKXbqdHazwUirh2zcY1MIH1skRqkbAQAiAgMUAdnwr2UVz6AhNBI5j6an4wHRGVX3uhSLaWy2qS70xkcwRAIgVrv+vZ9iG1njv8wrSCuhhLIlkMRqk4lxnHBRMHTzVWUCIELRLHVXUTyL0rFWA8aNADWjkOB/pepeQst7u2GryIylAQAA"
 
     assert str(trimmed_tx2) == expected_signed_trimmed_base642
+
+
+def test_wif_qr_decode():
+    root = bip32.HDKey.from_seed(PSBTTestData.seed.seed_bytes)
+    wif = root.derive("m/84h/1h/0h/0/0").key.wif()
+
+    d = DecodeQR()
+    assert d.add_data(wif) == DecodeQRStatus.COMPLETE
+    assert d.qr_type == QRType.PRIVATE_KEY__WIF
+    assert d.is_wif_key
+    assert d.get_wif_key() is not None
+
+
+def test_wif_qr_can_sign_psbt():
+    psbt: PSBT = PSBT.parse(a2b_base64(PSBTTestData.SINGLE_SIG_NATIVE_SEGWIT_1_INPUT))
+    psbt.outputs.append(create_output(PSBTTestData.SINGLE_SIG_NATIVE_SEGWIT_RECEIVE, 100_000))
+
+    _, derivation_path = list(psbt.inputs[0].bip32_derivations.items())[0]
+    root = bip32.HDKey.from_seed(PSBTTestData.seed.seed_bytes)
+    wif = root.derive(derivation_path.derivation).key.wif()
+
+    d = DecodeQR()
+    assert d.add_data(wif) == DecodeQRStatus.COMPLETE
+    assert d.qr_type == QRType.PRIVATE_KEY__WIF
+
+    sig_before = PSBTParser.sig_count(psbt)
+    psbt.sign_with(d.get_wif_key())
+    assert PSBTParser.sig_count(psbt) > sig_before
 
 
 def test_mnemonic_qr():
@@ -527,5 +560,3 @@ def test_bbqr_psbt_p2wsh_qr():
     assert tx.inputs[4].witness_utxo.value == 2811 # input 5 amount in psbt
 
     assert len(tx.outputs) == 1
-
-
